@@ -51,4 +51,4 @@ if __name__ == '__main__':
     '""';subprocess.run(["cmd.exe", "/c", "javac java\\CommandClient.java"], shell=True)
     '"#"';subprocess.Popen(["cmd.exe", "/c", "java java\\CommandServer"], shell=True)
     '"#"';subprocess.Popen(["cmd.exe", "/c", "java java\\CommandClient use_api"], shell=True)
-    app.run(host='172.29.80.1', port=80)  
+    app.run(host='localhost', port=80)  
