@@ -72,6 +72,11 @@ int main(int argc, char* argv[])
             return 0;
         }
     }
+    else
+    {
+        std::cout << "Welcome to the Custom Command Line Interface! you can get";
+        std::cout << " information about program with \"-help\" command.\n\n";
+    }
     
     while(true)
     {
@@ -1021,14 +1026,16 @@ int command(std::string command, std::string os)
         else if(command == "command_list")
         {
             std::cout << "List of valid commands:\n";
-            std::cout << "1) run <filename>: Run a file\n";
-            std::cout << "2) read <filename>: Read a file\n";
-            std::cout << "3) write <filename>: Write to a file\n";
-            std::cout << "4) append <filename>: Append to a file\n";
-            std::cout << "5) command: Enter a command\n";
-            std::cout << "6) exit: Exit the program\n";
-            std::cout << "delete <filename>: Delete a file\n";
-            std::cout << "colors: Display the available colors\n";
+            std::cout << "1) -help <command>: Display help information about a specific command\n";
+            std::cout << "2) run <filename>: Run a file\n";
+            std::cout << "3) read <filename>: Read a file\n";
+            std::cout << "4) write <filename>: Write to a file\n";
+            std::cout << "5) append <filename>: Append to a file\n";
+            std::cout << "6) command: Enter a command\n";
+            std::cout << "7) -printargs: Print the arguments passed to the program\n";
+            std::cout << "8) exit: Exit the program\n";
+            std::cout << "9) delete <filename>: Delete a file\n";
+            std::cout << "10) colors: Display the available colors\n";
             continue;
         }
         else if(command == "colors")
@@ -1056,6 +1063,21 @@ int command(std::string command, std::string os)
             else
             {
                 system("cd");
+            }
+            continue;
+        }
+        else if(command_args[0] == "-help")
+        {
+            if(command_args.size() == 1)
+            {
+                help("");
+            }
+            else
+            {
+                for(int i = 1; i < command_args.size(); i++)
+                {
+                    help(command_args[i]);
+                }
             }
             continue;
         }
