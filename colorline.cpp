@@ -35,18 +35,27 @@ int main(int argc, char *argv[]) {
     prefix = "./";
 #endif
 
-    if(argc >= 2 && std::string(argv[1]) == "all")
+    if(argc >= 2)
     {
         if(argc == 3)
         {
             os = std::string(argv[2]);
         }
-        for(int i = 0; i < 16; i++)
+
+        if(std::string(argv[1]) == "all")
         {
-            setColor(i, os);
-            std::cout << prefix + "colorline.exe " << std::hex << i << " (" << getColorName(i) << ")\n";
+            for(int i = 0; i < 16; i++)
+            {
+                setColor(i, os);
+                std::cout << prefix + "colorline.exe " << std::hex << i << " (" << getColorName(i) << ")\n";
+            }
+            std::cout << std::endl;
         }
-        std::cout << std::endl;
+        else 
+        {
+            unsigned int color = getColorCode(argv[1]);
+            setColor(color, os);
+        }
         return 0;
     }
     else if (argc < 2) {
@@ -55,9 +64,6 @@ int main(int argc, char *argv[]) {
         return 1;
     }
 
-    unsigned int color = getColorCode(argv[1]);
-
-    setColor(color, os);
     return 0;
 }
 
