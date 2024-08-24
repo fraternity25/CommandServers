@@ -1,4 +1,5 @@
 #include <iostream>
+#include <algorithm>
 #include <sstream>
 #include <vector>
 #include <map>
@@ -19,6 +20,7 @@ std::map<std::string, std::vector<std::string> > AnsiColorMap = {
     {"Light Yellow", {"\033[38;5;227m", "\033[48;5;227m"}}, {"Bright White", {"\033[38;5;231m", "\033[48;5;231m"}}
 };
 
+std::string lower_str(const std::string& str);
 void setColor(unsigned int color, const std::string& os = "Linux");
 unsigned int getColorCode(const std::string& color);
 std::string getColorName(unsigned int color);
@@ -37,17 +39,31 @@ int main(int argc, char *argv[]) {
 
     if(argc >= 2)
     {
+        bool os_name_specified = false;
         if(argc == 3)
         {
             os = std::string(argv[2]);
+            os_name_specified = true;
         }
 
         if(std::string(argv[1]) == "all")
         {
-            for(int i = 0; i < 16; i++)
+            if(os_name_specified)
             {
-                setColor(i, os);
-                std::cout << prefix + "colorline.exe " << std::hex << i << " (" << getColorName(i) << ")\n";
+                for(int i = 0; i < 16; i++)
+                {
+                    setColor(i, os);
+                    std::cout << prefix + "colorline.exe " << std::hex << i 
+                    << " " << os << " (" << getColorName(i) << ")\n";
+                }
+            }
+            else
+            {
+                for(int i = 0; i < 16; i++)
+                {
+                    setColor(i, os);
+                    std::cout << prefix + "colorline.exe " << std::hex << i << " (" << getColorName(i) << ")\n";
+                }
             }
             std::cout << std::endl;
         }
@@ -68,20 +84,30 @@ int main(int argc, char *argv[]) {
 }
 
 
+std::string lower_str(const std::string& str) 
+{
+    std::string result = str;
+    std::transform(result.begin(), result.end(), result.begin(),
+                   [](unsigned char c){ return std::tolower(c); });
+    return result;
+}
+
+
 void setColor(unsigned int color, const std::string& os) {
+    std::string _os = lower_str(os); 
     if (color > 0xff || color < 0x00) 
     {
         color = 0x07;
     }
     unsigned int FgNum = color % 0x10;
     unsigned int BgNum = (color - FgNum) / 0x10;
-    if(os == "Windows" && FgNum != 4 && FgNum != 5 && FgNum != 6)
+    if(_os == "windows" && FgNum != 4 && FgNum != 5 && FgNum != 6)
     {
         #ifdef _WIN32
             SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
         #endif
     }
-    else
+    else if(_os == "linux" || FgNum == 4 || FgNum == 5 || FgNum == 6)
     {
         if(color <= 0xF)
         {
